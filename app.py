@@ -11,9 +11,16 @@ def webhook():
     req = request.get_json()
 
     intent_name = req.get("queryResult", {}).get("intent", {}).get("displayName")
+    parameters = req.get("queryResult", {}).get("parameters", {})
 
     if intent_name == "Equipment Availability":
-        response_text = "We have treadmills, dumbbells, squat racks, and more. Availability may vary during peak hours."
+        equipment_type = parameters.get("equipment", "")
+
+        if equipment_type:
+            response_text = f"We have {equipment_type} available. Availability may vary during peak hours."
+        else:
+            response_text = "We have treadmills, dumbbells, squat racks, and more. Availability may vary during peak hours."
+
     else:
         response_text = "I am not sure how to respond to that."
 
